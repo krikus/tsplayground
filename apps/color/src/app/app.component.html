@@ -1,0 +1,49 @@
+<div>NIAAAH - color square playground :)!</div>
+  <nz-slider
+    [nzTipFormatter]="null"
+    [nzMin]="0"
+    [nzMax]="255"
+    [(ngModel)]="colorRed"
+  ></nz-slider>
+  <nz-slider
+    [nzTipFormatter]="null"
+    [nzMin]="0"
+    [nzMax]="255"
+    [(ngModel)]="colorGreen"
+  ></nz-slider>
+  <nz-slider
+    [nzTipFormatter]="null"
+    [nzMin]="0"
+    [nzMax]="255"
+    [(ngModel)]="colorBlue"
+  ></nz-slider>
+<div>
+  <playground-color-square
+    [copies]="dataSet.length"
+    [r]="colorRed"
+    [g]="colorGreen"
+    [b]="colorBlue"
+    (copied)="onCopied($event)">
+  ></playground-color-square>
+</div>
+<nz-table #colorsTable
+  *ngIf="dataSet.length"
+  [nzData]="dataSet"
+  [nzFrontPagination]="false"
+  [nzShowPagination]="false"
+  >
+    <thead>
+      <tr>
+        <th><i nz-icon type="picture" theme="outline"></i></th>
+        <th>Color</th>
+        <th><i nz-icon type="picture"></i>Actions</th>
+      </tr>
+    </thead>  
+    <tbody>
+      <tr *ngFor="let entry of colorsTable.data">
+        <td [style.background]="entry.hex"></td>
+        <td>{{entry.hex}}</td>
+        <td><a (click)="removeColor(entry)">Remove</a></td>
+      </tr>
+    </tbody>
+</nz-table>
