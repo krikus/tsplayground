@@ -2,22 +2,9 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import * as xolor from 'xolor';
 import ColorInterface from './color.interface';
+import { ClipboardService } from '../clipboard.service';
 
 const formatColor = (num) => `00${num.toString(16)}`.slice(-2);
-function copyMessage(val: string): void {
-  const selBox = document.createElement('textarea');
-  selBox.style.position = 'fixed';
-  selBox.style.left = '0';
-  selBox.style.top = '0';
-  selBox.style.opacity = '0';
-  selBox.value = val;
-  document.body.appendChild(selBox);
-  selBox.focus();
-  selBox.select();
-  document.execCommand('copy');
-  document.body.removeChild(selBox);
-}
-
 @Component({
   selector: 'playground-color-square',
   templateUrl: './color-square.component.html',
@@ -33,7 +20,7 @@ export class ColorSquareComponent implements OnInit {
   test($event: Event) {
     const hex = this.rgb;
     const { r, g, b } = this;
-    copyMessage(hex);
+    this.clipboard.copy(hex);
     this.nzMessage.success(`Color ${hex} coppied to your clipboard`);
     this.copied.emit({ hex, r, g, b });
   }
@@ -55,7 +42,7 @@ export class ColorSquareComponent implements OnInit {
     }
   }
 
-  constructor(private nzMessage: NzMessageService) { }
+  constructor(private nzMessage: NzMessageService, private clipboard: ClipboardService) { }
 
   ngOnInit() {
   }
