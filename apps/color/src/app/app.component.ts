@@ -1,8 +1,9 @@
 import { Component, NgModule } from '@angular/core';
-import ColorInterface from './color-square/color.interface';
-import { NzMessageService } from 'ng-zorro-antd';
-//import * as ColorSquareCompontent from './color-square/color-square.component';
-
+import ColorInterface from './store/color.interface';
+import { Observable, of } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { RemoveColor, ReplaceColors } from './store/color.actions';
+import { ClipboardService } from './clipboard.service';
 
 @Component({
   selector: 'playground-root',
@@ -14,24 +15,34 @@ export class AppComponent {
   colorGreen = 100;
   colorBlue = 156;
 
+  dataSet$: Observable<Array<ColorInterface>>;
   dataSet: Array<ColorInterface> = [];
 
-  onCopied($event: ColorInterface) {
-    if (!this.dataSet.find(x => x.hex === $event.hex)) {
-      this.dataSet =[
-        $event,
-        ...this.dataSet,
-      ];
-    } else {
-      this.nzMessage.error('Color already exists in table');
-    }
+  constructor(
+    private store: Store<{ colors: Array<ColorInterface> }>,
+    private clipboard: ClipboardService,
+    ) {
+    this.dataSet$ = store
+      .pipe(
+        select('colors'),
+      );
+
+    this.dataSet$
+      .subscribe({
+        next: (value) => this.dataSet = value,
+      });
   }
 
   removeColor(color: ColorInterface) {
-    this.dataSet = this.dataSet.filter(x => x !== color);
+    this.store.dispatch(new RemoveColor(color));
   }
 
-  constructor(private nzMessage: NzMessageService) {
-
+  clearAll() {
+    this.store.dispatch(new ReplaceColors([]));
   }
+
+  copyColor(color: ColorInterface) {
+    this.clipboard.copy(color.hex);
+  }
+
 }

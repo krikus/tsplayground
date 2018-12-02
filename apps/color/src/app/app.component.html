@@ -19,11 +19,9 @@
   ></nz-slider>
 <div>
   <playground-color-square
-    [copies]="dataSet.length"
     [r]="colorRed"
     [g]="colorGreen"
     [b]="colorBlue"
-    (copied)="onCopied($event)">
   ></playground-color-square>
 </div>
 <nz-table #colorsTable
@@ -36,14 +34,17 @@
       <tr>
         <th><i nz-icon type="picture" theme="outline"></i></th>
         <th>Color</th>
-        <th><i nz-icon type="picture"></i>Actions</th>
+        <th><i nz-icon type="picture"></i>Actions | <a (click)="clearAll()">Clear all</a></th>
       </tr>
     </thead>  
     <tbody>
       <tr *ngFor="let entry of colorsTable.data">
         <td [style.background]="entry.hex"></td>
         <td>{{entry.hex}}</td>
-        <td><a (click)="removeColor(entry)">Remove</a></td>
+        <td>
+          <a (click)="removeColor(entry)">Remove</a> |
+          <a (click)="copyColor(entry)">Copy</a>
+        </td>
       </tr>
     </tbody>
 </nz-table>

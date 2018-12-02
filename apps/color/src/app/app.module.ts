@@ -10,6 +10,8 @@ import { NgZorroAntdModule, NZ_I18N, en_US, NzIconModule, NZ_ICONS } from 'ng-zo
 import { FormsModule } from '@angular/forms';
 import { AccountBookFill, AlertFill, AlertOutline } from '@ant-design/icons-angular/icons';
 import { IconDefinition } from '@ant-design/icons-angular';
+import { colorReducer } from './store/color.reducer';
+import { StoreModule } from '@ngrx/store';
 
 const icons: IconDefinition[] = [ AccountBookFill, AlertOutline, AlertFill ];
 
@@ -24,6 +26,7 @@ const icons: IconDefinition[] = [ AccountBookFill, AlertOutline, AlertFill ];
     NxModule.forRoot(),
     RouterModule.forRoot([], { initialNavigation: 'enabled' }),
     NgZorroAntdModule,
+    StoreModule.forRoot({ colors: colorReducer }),
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },
